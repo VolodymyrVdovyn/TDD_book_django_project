@@ -1,6 +1,8 @@
-from logging import warning
-from selenium import webdriver
 import unittest
+from logging import warning
+
+from selenium import webdriver
+
 
 class NewVisitorTest(unittest.TestCase):
     """Test for new visitor"""
@@ -12,8 +14,8 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.quit()
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        # Open prjoect home page
-        self.browser.get('http://localhost:8000')
+        # Open project home page
+        self.browser.get("http://localhost:8000")
 
         # Home page title says that it is To-Do project
         self.assertIn("To-Do", self.browser.title)
@@ -36,6 +38,6 @@ class NewVisitorTest(unittest.TestCase):
 
         # End test session
 
+
 if __name__ == "__main__":
     unittest.main(warnings="ignore")
-
