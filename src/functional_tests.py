@@ -36,9 +36,9 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element(By.TAG_NAME, "id_list_table")
+        table = self.browser.find_element(By.ID, "id_list_table")
         rows = table.find_elements(By.TAG_NAME, "tr")
-        self.assertTrue(any(row.text == "1: Buy milk" for row in rows))
+        self.assertTrue(any(row.text == "1: Buy milk" for row in rows), "New element not appear in table")
 
         # On page, you can write another To-Do line
         # Write "Make milkshake"
