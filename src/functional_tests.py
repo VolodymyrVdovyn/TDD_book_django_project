@@ -43,6 +43,7 @@ class NewVisitorTest(unittest.TestCase):
 
         # On page, you can write another To-Do line
         # Write "Make milkshake"
+        input_box = self.browser.find_element(By.ID, "id_new_item")
         input_box.send_keys("Make milkshake")
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)

@@ -9,9 +9,28 @@ class HomePageTest(TestCase):
 
     def test_can_save_POST_request(self):
         input_value = "A new item in list"
-        response = self.client.post("/", data={"item_text": input_value})
-        self.assertIn(input_value, response.content.decode())
-        self.assertTemplateUsed(response, "home.html")
+        self.client.post("/", data={"item_text": input_value})
+        self.assertEquals(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEquals(new_item.text, input_value)
+
+    def test_redirects_after_POST(self):
+        response = self.client.post("/", data={"item_text": "something"})
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(response["location"], "/")
+
+    def test_only_save_item_if_necessary(self):
+        self.client.get("/")
+        self.assertEquals(Item.objects.count(), 0)
+
+    def test_display_all_list_items(self):
+        Item.objects.create(text="First item")
+        Item.objects.create(text="Second item")
+
+        response = self.client.get("/")
+
+        self.assertIn("First item", response.content.decode())
+        self.assertIn("Second item", response.content.decode())
 
 
 class ItemModelTest(TestCase):
