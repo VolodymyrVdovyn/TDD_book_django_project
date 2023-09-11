@@ -1,13 +1,14 @@
 import time
 import unittest
 from logging import warning
+from django.test import LiveServerTestCase
 
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     """Test for new visitor"""
 
     def setUp(self):
@@ -23,7 +24,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Open project home page
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
 
         # Home page title says that it is To-Do project
         self.assertIn("To-Do", self.browser.title)
@@ -58,7 +59,3 @@ class NewVisitorTest(unittest.TestCase):
         # When click on that URL user can see him list To-Do
 
         # End test session
-
-
-if __name__ == "__main__":
-    unittest.main(warnings="ignore")
