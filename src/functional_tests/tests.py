@@ -66,3 +66,42 @@ class NewVisitorTest(LiveServerTestCase):
         # When click on that URL user can see him list To-Do
 
         # End test session
+
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        self.browser.get(self.live_server_url)
+        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box.send_keys("Buy milk")
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: Buy milk")
+
+        first_user_list_url = self.browser.current_url
+        self.assertRegex(first_user_list_url, 'lists/.+')
+
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element(By.TAG_NAME, "body").text
+        self.assertNotIn("Buy milk", page_text)
+        self.assertNotIn("Make milkshake", page_text)
+
+        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box.send_keys("Make lunch")
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: Make lunch")
+
+        second_user_list_url = self.browser.current_url
+        self.assertRegex(second_user_list_url, 'lists/.+')
+        self.assertNotEquals(first_user_list_url, second_user_list_url)
+
+        page_text = self.browser.find_element(By.TAG_NAME, "body").text
+        self.assertIn("Make lunch", page_text)
+        self.assertNotIn("Make milkshake", page_text)
+        self.assertNotIn("Buy milk", page_text)
+
+
+
+
+
+
+
