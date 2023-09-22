@@ -1,6 +1,6 @@
 import time
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver import Keys
@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 MAX_WAIT = 3
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     """Test for new visitor"""
 
     def setUp(self):
@@ -75,7 +75,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.wait_for_row_in_list_table("1: Buy milk")
 
         first_user_list_url = self.browser.current_url
-        self.assertRegex(first_user_list_url, 'lists/.+')
+        self.assertRegex(first_user_list_url, "lists/.+")
 
         self.browser.quit()
         self.browser = webdriver.Firefox()
@@ -90,7 +90,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.wait_for_row_in_list_table("1: Make lunch")
 
         second_user_list_url = self.browser.current_url
-        self.assertRegex(second_user_list_url, 'lists/.+')
+        self.assertRegex(second_user_list_url, "lists/.+")
         self.assertNotEquals(first_user_list_url, second_user_list_url)
 
         page_text = self.browser.find_element(By.TAG_NAME, "body").text
@@ -102,20 +102,11 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.set_window_size(1024, 768)
 
         input_box = self.browser.find_element(By.ID, "id_new_item")
-        self.assertAlmostEqual(input_box.location['x'] + (input_box.size['width'] / 2), 512, delta=10)
+        self.assertAlmostEqual(input_box.location["x"] + (input_box.size["width"] / 2), 512, delta=10)
 
         input_box.send_keys("Testing")
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: Testing")
 
         input_box = self.browser.find_element(By.ID, "id_new_item")
-        self.assertAlmostEqual(input_box.location['x'] + (input_box.size['width'] / 2), 512, delta=10)
-
-
-
-
-
-
-
-
-
+        self.assertAlmostEqual(input_box.location["x"] + (input_box.size["width"] / 2), 512, delta=10)

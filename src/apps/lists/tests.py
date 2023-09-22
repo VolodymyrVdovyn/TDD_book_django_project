@@ -5,7 +5,7 @@ from lists.models import Item, List
 class HomePageTest(TestCase):
     def test_uses_home_page(self):
         response = self.client.get("/")
-        self.assertTemplateUsed(response, "home.html")
+        self.assertTemplateUsed(response, "lists/home.html")
 
 
 class ListAndItemModelTest(TestCase):
@@ -42,7 +42,7 @@ class ListViewTest(TestCase):
     def test_uses_list_template(self):
         list_ = List.objects.create()
         response = self.client.get(f"/lists/{list_.id}")
-        self.assertTemplateUsed(response, "list.html")
+        self.assertTemplateUsed(response, "lists/list.html")
 
     def test_display_only_items_for_that_list(self):
         correct_list = List.objects.create()
