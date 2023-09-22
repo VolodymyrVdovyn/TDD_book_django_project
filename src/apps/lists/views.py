@@ -4,13 +4,13 @@ from lists.models import Item, List
 
 
 def home_page(request):
-    return render(request, "home.html")
+    return render(request, "lists/home.html")
 
 
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)
     items = Item.objects.filter(list=list_)
-    return render(request, "list.html", {"list": list_})
+    return render(request, "lists/list.html", {"list": list_})
 
 
 def new_list(request):
