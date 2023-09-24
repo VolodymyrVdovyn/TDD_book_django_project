@@ -5,3 +5,4 @@ __pychache__
 *.pyc
 .idea
 .DS_Store
+collected_static
