@@ -6,15 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>To-Do lists</title>
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
 </head>
 <body>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-6">
+        <div class="col-6 jumbotron">
             <div class="text-center">
                 <h1>{% block header_text %}{% endblock header_text %}</h1>
                 <form method="POST" action="{% block form_action %}{% endblock form_action %}">
-                    <input name="item_text" id="id_new_item" placeholder="Enter a to-do item"/>
+                    <input name="item_text" id="id_new_item" class="form-control" placeholder="Enter a to-do item"/>
                     {% csrf_token %}
                 </form>
             </div>
