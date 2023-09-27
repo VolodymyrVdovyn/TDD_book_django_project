@@ -1,0 +1,13 @@
+# if SITENAME == volo-staging.pp.ua
+# location: /etc/systemd/system/gunicorn-SITENAME.service
+[Unit]
+Description=Gunicorn server for SITENAME
+
+[Service]
+Restart=on-failure
+User=volo
+WorkingDirectory=/home/volo/sites/SITENAME/src
+ExecStart=/home/volo/sites/SITENAME/venv/bin/gunicorn --bind unix:/tmp/SITENAME.socket config.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
