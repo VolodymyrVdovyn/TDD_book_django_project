@@ -6,3 +6,4 @@ __pychache__
 .idea
 .DS_Store
 /static/
+deploy_tools/server_sudo_password.txt

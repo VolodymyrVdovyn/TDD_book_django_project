@@ -1,12 +1,28 @@
-from fabric.contrib.files import append, exists, sed
-from fabric.api import env, local, run, cd
+import os
 import random
+import re
+
+from fabric.api import cd, env, local, run, sudo
+from fabric.contrib.files import append, exists, sed
 
 RERO_URL = "git@github.com:VolodymyrVdovyn/TDD_book_django_project.git"
 
 
-def _create_project_folder(project_folder):
-    run(f"mkdir -p {project_folder}")
+def _set_env_password():
+    server_sudo_password_file = f'{local("pwd", capture=True)}/server_sudo_password.txt'
+
+    if not os.path.exists(server_sudo_password_file):
+        raise Exception("Server sudo password file is not exists")
+
+    with open(server_sudo_password_file, "r") as file:
+        text = file.read()
+    pattern = r'SERVER_SUDO_PASSWORD = "(.*?)"'
+    match = re.search(pattern, text)
+    if not match:
+        raise Exception("SERVER_SUDO_PASSWORD not exists in file server_sudo_password.txt")
+
+    value = match.group(1)
+    env.password = value
 
 
 def _get_latest_project_from_git():
@@ -47,10 +63,25 @@ def _update_database():
 
 
 def __configurate_nginx_and_gunicorn(site_name):
-    run(f"s/SITENAME/{site_name}/g ")
+    sed_command = f'sed "s/SITENAME/{site_name}/g" ./deploy_tools/nginx.template.conf'
+    tee_command = f"tee /etc/nginx/sites-available/{site_name}"
+
+    sudo(f"{sed_command} | {tee_command}")
+
+    sudo(f"ln -sf /etc/nginx/sites-available/{site_name}  /etc/nginx/sites-enabled/{site_name}")
+
+    sed_command = f'sed "s/SITENAME/{site_name}/g" ./deploy_tools/gunicorn-systemd.template.service'
+    tee_command = f"tee /etc/systemd/system/gunicorn-{site_name}.service"
+    sudo(f"{sed_command} | {tee_command}")
+
+    sudo("systemctl daemon-reload")
+    sudo("systemctl reload nginx")
+    sudo(f"systemctl enable gunicorn-{site_name}")
+    sudo(f"systemctl start gunicorn-{site_name}")
 
 
 def deploy():
+    _set_env_password()
     project_folder = f"/home/{env.user}/sites/{env.host}"
     run(f"mkdir -p {project_folder}")
 
@@ -60,3 +91,4 @@ def deploy():
         _update_venv()
         _update_static_files()
         _update_database()
+        __configurate_nginx_and_gunicorn(env.host)
