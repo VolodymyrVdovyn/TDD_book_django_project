@@ -31,11 +31,31 @@ class ListViewTest(TestCase):
         self.assertNotContains(response, "Other First item")
         self.assertNotContains(response, "Other Second item")
 
-    def test_ref(self):
+    def test_passes_correct_list_to_template(self):
         correct_list = List.objects.create()
         List.objects.create()
         response = self.client.get(f"/lists/{correct_list.id}")
         self.assertEqual(response.context["list"], correct_list)
+
+    def test_can_save_a_POST_request_to_existing_list(self):
+        correct_list = List.objects.create()
+        List.objects.create()
+
+        self.client.post(f"/lists/{correct_list.id}", data={"item_text": "New item"})
+
+        self.assertEqual(Item.objects.count(), 1)
+
+        item = Item.objects.first()
+        self.assertEqual(item.text, "New item")
+        self.assertEqual(item.list, correct_list)
+
+    def test_POST_redirects_to_list_view(self):
+        correct_list = List.objects.create()
+        List.objects.create()
+
+        response = self.client.post(f"/lists/{correct_list.id}", data={"item_text": "New item"})
+
+        self.assertRedirects(response, f"/lists/{correct_list.id}")
 
 
 class NewListTest(TestCase):
@@ -62,25 +82,3 @@ class NewListTest(TestCase):
         self.client.post("/lists/new", data={"item_text": ""})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
-
-
-class NewItemTest(TestCase):
-    def test_can_save_a_POST_request_to_existing_list(self):
-        correct_list = List.objects.create()
-        List.objects.create()
-
-        self.client.post(f"/lists/{correct_list.id}/add-item", data={"item_text": "New item"})
-
-        self.assertEqual(Item.objects.count(), 1)
-
-        item = Item.objects.first()
-        self.assertEqual(item.text, "New item")
-        self.assertEqual(item.list, correct_list)
-
-    def test_redirects_to_list_view(self):
-        correct_list = List.objects.create()
-        List.objects.create()
-
-        response = self.client.post(f"/lists/{correct_list.id}/add-item", data={"item_text": "New item"})
-
-        self.assertRedirects(response, f"/lists/{correct_list.id}")
