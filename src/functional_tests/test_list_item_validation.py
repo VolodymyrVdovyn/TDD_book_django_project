@@ -7,18 +7,26 @@ from .base import FunctionalTest
 class ItemValidationTest(FunctionalTest):
     def test_cannot_add_empty_list_items(self):
         self.browser.get(self.live_server_url)
-        input_box = self.browser.find_element(By.ID, "id_new_item")
-        input_box.send_keys("")
-        input_box.send_keys(Keys.ENTER)
 
-        self.browser.get(self.live_server_url)
-        input_box = self.browser.find_element(By.ID, "id_new_item")
-        input_box.send_keys("Buy milk")
-        input_box.send_keys(Keys.ENTER)
+        self.browser.find_element(By.ID, "id_new_item").send_keys(Keys.ENTER)
+        self.wait_for(
+            lambda: self.assertEqual(
+                self.browser.find_element(By.CSS_SELECTOR, ".has-error").text, "You can't have an empty list item"
+            )
+        )
 
-        self.browser.get(self.live_server_url)
-        input_box = self.browser.find_element(By.ID, "id_new_item")
-        input_box.send_keys("")
-        input_box.send_keys(Keys.ENTER)
+        self.browser.find_element(By.ID, "id_new_item").send_keys("Buy milk")
+        self.browser.find_element(By.ID, "id_new_item").send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: Buy milk")
 
-        self.fail("Write me!")
+        self.browser.find_element(By.ID, "id_new_item").send_keys(Keys.ENTER)
+        self.wait_for(
+            lambda: self.assertEqual(
+                self.browser.find_element(By.CSS_SELECTOR, ".has-error").text, "You can't have an empty list item"
+            )
+        )
+
+        self.browser.find_element(By.ID, "id_new_item").send_keys("Make tea")
+        self.browser.find_element(By.ID, "id_new_item").send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: Buy milk")
+        self.wait_for_row_in_list_table("2: Make tea")
