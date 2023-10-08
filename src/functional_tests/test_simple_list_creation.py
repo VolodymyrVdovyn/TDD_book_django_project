@@ -18,7 +18,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn("To-Do", header_text)
 
         # You can write first To-Do line
-        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box = self.get_item_input_box()
         self.assertEquals(input_box.get_attribute("placeholder"), "Enter a to-do item")
 
         # Write "Buy milk"
@@ -29,7 +29,7 @@ class NewVisitorTest(FunctionalTest):
 
         # On page, you can write another To-Do line
         # Write "Make milkshake"
-        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box = self.get_item_input_box()
         input_box.send_keys("Make milkshake")
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: Buy milk")
@@ -46,7 +46,7 @@ class NewVisitorTest(FunctionalTest):
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         self.browser.get(self.live_server_url)
-        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box = self.get_item_input_box()
         input_box.send_keys("Buy milk")
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: Buy milk")
@@ -61,7 +61,7 @@ class NewVisitorTest(FunctionalTest):
         page_text = self.browser.find_element(By.TAG_NAME, "body").text
         self.assertNotIn("Buy milk", page_text)
 
-        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box = self.get_item_input_box()
         input_box.send_keys("Make lunch")
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table("1: Make lunch")
