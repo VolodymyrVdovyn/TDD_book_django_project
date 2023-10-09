@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
-from .base import FunctionalTest
+from functional_tests.base import FunctionalTest
 
 
 class NewVisitorTest(FunctionalTest):
