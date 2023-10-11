@@ -2,6 +2,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from functional_tests.base import FunctionalTest
+from lists.forms import DUPLICATE_ITEM_ERROR
 
 
 class ItemValidationTest(FunctionalTest):
@@ -36,7 +37,6 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for(
             lambda: self.assertEqual(
-                self.browser.find_element(By.CSS_SELECTOR, ".has-error").text, "You can't have an empty list item"
+                self.browser.find_element(By.CSS_SELECTOR, ".has-error").text, DUPLICATE_ITEM_ERROR
             )
         )
-
