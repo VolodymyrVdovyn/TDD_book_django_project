@@ -77,7 +77,7 @@ def __configurate_nginx_and_gunicorn(site_name):
     sudo("systemctl daemon-reload")
     sudo("systemctl reload nginx")
     sudo(f"systemctl enable gunicorn-{site_name}")
-    sudo(f"systemctl start gunicorn-{site_name}")
+    sudo(f"systemctl restart gunicorn-{site_name}")
 
 
 def deploy():
