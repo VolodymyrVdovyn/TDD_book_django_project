@@ -34,7 +34,9 @@
         <script src="{% static 'lists/jquery-3.7.1.min.js' %}"></script>
         <script src="{% static 'lists/list.js' %}"></script>
         <script>
-            initialize();
+            $(document).ready(function () {
+                window.Superlists.initialize();
+            });
         </script>
     </body>
 </html>
