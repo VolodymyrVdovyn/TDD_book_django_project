@@ -1,42 +1,44 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>To-Do lists</title>
-        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
-        <link href="{% static 'css/base.css' %}" rel="stylesheet" />
-        <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon" />
-    </head>
-    <body>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-6 jumbotron">
-                    <div class="text-center">
-                        <h1>{% block header_text %}{% endblock header_text %}</h1>
-                        <form method="POST" action="{% block form_action %}{% endblock form_action %}">
-                            {{ form.text }} {% csrf_token %} {% if form.errors %}
-                            <div class="form-group has-error">
-                                <span class="help-block">{{ form.text.errors }}</span>
-                            </div>
-                            {% endif %}
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-6">{% block table %}{% endblock table %}</div>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>To-Do lists</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet"/>
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon"/>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6 jumbotron">
+            <div class="text-center">
+                <h1>{% block header_text %}{% endblock header_text %}</h1>
+                <form method="POST" action="{% block form_action %}{% endblock form_action %}">
+                    {{ form.text }}
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="form-group has-error">
+                            <span class="help-block">{{ form.text.errors }}</span>
+                        </div>
+                    {% endif %}
+                </form>
             </div>
         </div>
+    </div>
 
-        <script src="{% static 'lists/jquery-3.7.1.min.js' %}"></script>
-        <script src="{% static 'lists/list.js' %}"></script>
-        <script>
-            $(document).ready(function () {
-                window.Superlists.initialize();
-            });
-        </script>
-    </body>
+    <div class="row justify-content-center">
+        <div class="col-6">{% block table %}{% endblock table %}</div>
+    </div>
+</div>
+
+<script src="{% static 'lists/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'lists/list.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        window.Superlists.initialize();
+    });
+</script>
+</body>
 </html>
