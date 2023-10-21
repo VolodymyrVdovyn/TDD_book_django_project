@@ -11,9 +11,7 @@ class LayoutAndStylingTest(FunctionalTest):
         input_box = self.get_item_input_box()
         self.assertAlmostEqual(input_box.location["x"] + (input_box.size["width"] / 2), 512, delta=10)
 
-        input_box.send_keys("Testing")
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Testing")
+        self.add_list_item("Testing")
 
         input_box = self.get_item_input_box()
         self.assertAlmostEqual(input_box.location["x"] + (input_box.size["width"] / 2), 512, delta=10)

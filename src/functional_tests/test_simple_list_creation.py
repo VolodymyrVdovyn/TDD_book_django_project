@@ -23,17 +23,12 @@ class NewVisitorTest(FunctionalTest):
 
         # Write "Buy milk"
         # When click Enter. On page, we have new line "1: Buy milk"
-        input_box.send_keys("Buy milk")
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Buy milk")
+        self.add_list_item("Buy milk")
 
         # On page, you can write another To-Do line
         # Write "Make milkshake"
-        input_box = self.get_item_input_box()
-        input_box.send_keys("Make milkshake")
-        input_box.send_keys(Keys.ENTER)
+        self.add_list_item("Make milkshake")
         self.wait_for_row_in_list_table("1: Buy milk")
-        self.wait_for_row_in_list_table("2: Make milkshake")
 
         # Page reload again and show two To-Do line
 
@@ -46,10 +41,8 @@ class NewVisitorTest(FunctionalTest):
 
     def test_multiple_users_can_start_lists_at_different_urls(self):
         self.browser.get(self.live_server_url)
-        input_box = self.get_item_input_box()
-        input_box.send_keys("Buy milk")
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Buy milk")
+
+        self.add_list_item("Buy milk")
 
         first_user_list_url = self.browser.current_url
         self.assertRegex(first_user_list_url, "lists/.+")
@@ -61,10 +54,7 @@ class NewVisitorTest(FunctionalTest):
         page_text = self.browser.find_element(By.TAG_NAME, "body").text
         self.assertNotIn("Buy milk", page_text)
 
-        input_box = self.get_item_input_box()
-        input_box.send_keys("Make lunch")
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Make lunch")
+        self.add_list_item("Make lunch")
 
         second_user_list_url = self.browser.current_url
         self.assertRegex(second_user_list_url, "lists/.+")

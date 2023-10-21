@@ -1,8 +1,8 @@
+from lists.forms import DUPLICATE_ITEM_ERROR
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from functional_tests.base import FunctionalTest
-from lists.forms import DUPLICATE_ITEM_ERROR
 
 
 class ItemValidationTest(FunctionalTest):
@@ -33,9 +33,7 @@ class ItemValidationTest(FunctionalTest):
     def test_cannot_add_duplicate_list_items(self):
         self.browser.get(self.live_server_url)
 
-        self.get_item_input_box().send_keys("Buy milk")
-        self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Buy milk")
+        self.add_list_item("Buy milk")
 
         self.get_item_input_box().send_keys("Buy milk")
         self.get_item_input_box().send_keys(Keys.ENTER)
@@ -44,9 +42,7 @@ class ItemValidationTest(FunctionalTest):
     def test_error_messages_are_cleared_on_input(self):
         self.browser.get(self.live_server_url)
 
-        self.get_item_input_box().send_keys("Buy milk")
-        self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Buy milk")
+        self.add_list_item("Buy milk")
 
         self.get_item_input_box().send_keys("Buy milk")
         self.get_item_input_box().send_keys(Keys.ENTER)
