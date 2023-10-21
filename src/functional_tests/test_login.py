@@ -23,16 +23,16 @@ class LoginTest(FunctionalTest):
 
         email_id = None
         start = time.time()
-        inbox = poplib.POP3_SSL("pop.mail.yahoo.com")
+        inbox = poplib.POP3_SSL("pop.gmail.com")
         try:
             inbox.user(test_email)
-            inbox.pass_(os.environ["YAHOO_PASSWORD"])
+            inbox.pass_(os.environ["MAIL_PASSWORD"])
             while time.time() - start < 60:
                 count, _ = inbox.stat()
                 for i in reversed(range(max(1, count - 10), count + 1)):
                     print("getting msg", i)
                     _, lines, __ = inbox.retr(i)
-                    lines = [l.decode("utf8") for l in lines]
+                    lines = [line.decode("utf8") for line in lines]
                     # print(lines)
                     if f"Subject: {subject}" in lines:
                         email_id = i
@@ -46,7 +46,7 @@ class LoginTest(FunctionalTest):
 
     def test_can_get_email_link_to_log_in(self):
         if self.staging_server:
-            TEST_EMAIL = "test.testuser@yahoo.com"
+            TEST_EMAIL = os.environ["MAIL_LOGIN"]
         else:
             TEST_EMAIL = "test@example.com"
 
