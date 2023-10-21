@@ -7,7 +7,7 @@ Description=Gunicorn server for SITENAME
 Restart=on-failure
 User=volo
 WorkingDirectory=/home/volo/sites/SITENAME/src
-ExecStart=/home/volo/sites/SITENAME/venv/bin/gunicorn --bind unix:/tmp/SITENAME.socket config.wsgi:application
+ExecStart=/home/volo/sites/SITENAME/venv/bin/gunicorn --bind unix:/tmp/SITENAME.socket --capture-output --access-logfile ../access.log --error-logfile ../error.log config.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
