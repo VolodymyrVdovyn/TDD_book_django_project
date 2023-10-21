@@ -1,4 +1,4 @@
-# if SITENAME == volo-staging.pp.ua
+# SITENAME is volo-staging.pp.ua or volo.pp.ua
 # location: /etc/systemd/system/gunicorn-SITENAME.service
 [Unit]
 Description=Gunicorn server for SITENAME
@@ -6,6 +6,7 @@ Description=Gunicorn server for SITENAME
 [Service]
 Restart=on-failure
 User=volo
+# Environment=EMAIL_PASSWORD=yoursekritpasswordhere
 WorkingDirectory=/home/volo/sites/SITENAME/src
 ExecStart=/home/volo/sites/SITENAME/venv/bin/gunicorn --bind unix:/tmp/SITENAME.socket --capture-output --access-logfile ../access.log --error-logfile ../error.log config.wsgi:application
 
