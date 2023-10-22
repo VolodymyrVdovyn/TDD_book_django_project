@@ -65,3 +65,9 @@ class ListModelTest(TestCase):
     @staticmethod
     def test_list_owner_is_optional():
         List.objects.create()
+
+    def test_list_name_is_first_item_text(self):
+        list_ = List.objects.create()
+        item1 = Item.objects.create(text="First item", list=list_)
+        item2 = Item.objects.create(text="Item 2", list=list_)
+        self.assertEqual(list_.name, item1.text)

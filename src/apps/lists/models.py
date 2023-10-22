@@ -6,7 +6,10 @@ from django.urls import reverse
 
 class List(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
-    name = models.TextField(default="")
+
+    @property
+    def name(self):
+        return self.item_set.first().text
 
     def get_absolute_url(self):
         return reverse("view_list", args=[self.id])
