@@ -69,5 +69,28 @@ class ListModelTest(TestCase):
     def test_list_name_is_first_item_text(self):
         list_ = List.objects.create()
         item1 = Item.objects.create(text="First item", list=list_)
-        item2 = Item.objects.create(text="Item 2", list=list_)
+        Item.objects.create(text="Item 2", list=list_)
         self.assertEqual(list_.name, item1.text)
+
+    def test_create_new_method_creates_list(self):
+        List.create_new(first_item_text="First item")
+        self.assertEqual(List.objects.count(), 1)
+        new_list = List.objects.first()
+        self.assertIsNone(new_list.owner)
+
+    def test_create_new_method_creates_list_with_owner(self):
+        user = User.objects.create(email="a@b.com")
+        List.create_new(first_item_text="First item", owner=user)
+        new_list = List.objects.first()
+        self.assertEqual(new_list.owner, user)
+
+    def test_create_new_method_creates_item(self):
+        List.create_new(first_item_text="First item")
+        self.assertEqual(Item.objects.count(), 1)
+        item = Item.objects.first()
+        self.assertEqual(item.text, "First item")
+        self.assertEqual(item.list, List.objects.first())
+
+    def test_list_create_returns_new_list(self):
+        list_ = List.create_new(first_item_text="First item")
+        self.assertEqual(List.objects.first(), list_)
