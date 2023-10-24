@@ -7,7 +7,6 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
-from functional_tests.server_tools import reset_database
 
 MAX_WAIT = 3
 
@@ -32,6 +31,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.staging_server = os.environ.get("STAGING_SERVER")
         if self.staging_server:
             self.live_server_url = "http://" + self.staging_server
+            from functional_tests.server_tools import reset_database
+
             reset_database(self.staging_server)
 
     def tearDown(self):

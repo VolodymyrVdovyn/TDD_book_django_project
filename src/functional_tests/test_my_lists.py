@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 
 from functional_tests.base import FunctionalTest
 from functional_tests.management.commands.create_session import create_pre_authenticated_session
-from functional_tests.server_tools import create_session_on_server
 
 User = get_user_model()
 
@@ -14,6 +13,8 @@ TEST_EMAIL = "test@example.com"
 class MyListsTest(FunctionalTest):
     def create_pre_authenticated_session(self, email):
         if self.staging_server:
+            from functional_tests.server_tools import create_session_on_server
+
             session_key = create_session_on_server(self.staging_server, email)
         else:
             session_key = create_pre_authenticated_session(email)
